@@ -1,6 +1,6 @@
 # Agent planning prompts
 
-**Next action:** Install the [i-have-adhd skill](https://github.com/ayghri/i-have-adhd/blob/main/INSTALL.md) in the coding tool you use. Then open the repository you want to improve.
+**Next action:** Install the [bundled i-have-adhd skill](skills/i-have-adhd/SKILL.md) in your coding tool, then open the project you want to improve.
 
 Reusable **Plan → Goal → morning checklist** prompts for **Claude Code** and **OpenAI Codex**. The agents do the implementation; you review **draft PRs**. They never merge or deploy on your behalf.
 
@@ -8,22 +8,24 @@ Reusable **Plan → Goal → morning checklist** prompts for **Claude Code** and
 
 ### Once per computer (about 5 minutes if both tools are installed)
 
-- [ ] Install the upstream `i-have-adhd` skill for your tool (commands below). This is a separate skill, **not bundled into this repo**.
+- [ ] Install the **bundled** `i-have-adhd` skill for your tool (commands below). The original source is included in `skills/i-have-adhd/`.
 - [ ] Check you can open the target repo and create branches and draft PRs.
 
-**Claude Code** (from the [upstream install guide](https://github.com/ayghri/i-have-adhd/blob/main/INSTALL.md)):
+**Claude Code** — from this repo's root, copy to your personal skills directory:
 
 ```sh
-claude plugin marketplace add ayghri/i-have-adhd
-claude plugin install i-have-adhd@i-have-adhd
+mkdir -p ~/.claude/skills/i-have-adhd
+cp skills/i-have-adhd/SKILL.md ~/.claude/skills/i-have-adhd/SKILL.md
 ```
 
-**Codex** (from the same guide):
+**Codex** — from this repo's root, copy to your personal skills directory:
 
 ```sh
-codex plugin marketplace add ayghri/i-have-adhd --ref main
-codex plugin add i-have-adhd@i-have-adhd
+mkdir -p ~/.agents/skills/i-have-adhd
+cp skills/i-have-adhd/SKILL.md ~/.agents/skills/i-have-adhd/SKILL.md
 ```
+
+Restart the tool after installing. Activate explicitly using `/i-have-adhd` (Claude Code) or `$i-have-adhd` (Codex). For alternate installation methods and version-specific behavior, see the [author's installation guide](https://github.com/ayghri/i-have-adhd/blob/main/INSTALL.md).
 
 ### Every time you run a project (about 2 minutes to launch)
 
@@ -51,26 +53,19 @@ See [MORNING_HANDOFF.md](MORNING_HANDOFF.md) for the expected output format.
 | [PLAN_PROMPT.md](PLAN_PROMPT.md) | Discover, prioritize, and define verifiable work; no implementation |
 | [GOAL_PROMPT.md](GOAL_PROMPT.md) | Execute approved work; create validated draft PRs and checkpoints |
 | [MORNING_HANDOFF.md](MORNING_HANDOFF.md) | Standard ADHD-friendly end-of-run checklist |
-| `publish.sh` | Publish this folder as a **private** GitHub repository from your computer |
+| [skills/i-have-adhd/SKILL.md](skills/i-have-adhd/SKILL.md) | Complete vendored ADHD output skill | 
+| [skills/i-have-adhd/LICENSE](skills/i-have-adhd/LICENSE) | Original MIT license and attribution |
 
-## Put this bundle in your private GitHub
+## Private GitHub repository
 
-If this folder is not already hosted, install [GitHub CLI](https://cli.github.com/) and run from the extracted folder:
-
-```sh
-./publish.sh
-```
-
-This creates a **private** repo named `agent-planning-prompts` under your authenticated GitHub account, and verifies its visibility. It refuses to overwrite an existing remote repo. You can provide a different name: `./publish.sh my-prompt-library`.
-
-Prefer the website? [Create a new repository](https://github.com/new), select **Private**, then upload these files. Check the visibility again after creation.
+This repository is already hosted privately at [hannahhenderson/agent-planning-prompts](https://github.com/hannahhenderson/agent-planning-prompts). Clone or copy the files into the target project when you use them. It is a prompt library, not the implementation target.
 
 ## Tool-specific notes
 
 - **Claude Code:** `/goal` is session-scoped and can run noninteractively with `claude -p`. Auto/permission mode still controls tool approvals. See [Claude Goal documentation](https://code.claude.com/docs/en/goal).
 - **Codex:** `/goal` is a persistent, thread-scoped objective. Confirm you are using a build that supports Goals. See [Codex Goals guide](https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex).
 - **Planning:** If Plan mode is read-only, the agent should display a draft for your approval. Save the approved plan once in write-enabled mode; never assume Plan mode wrote a file.
-- **Skills:** `i-have-adhd` has different explicit invocation syntax in Claude Code and Codex. The source is [ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd/blob/main/skills/i-have-adhd/SKILL.md), licensed MIT by its author. This repo **links to** it rather than redistributing it.
+- **Skills:** This repo includes an unmodified copy of [ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd/blob/main/skills/i-have-adhd/SKILL.md), © 2026 Ayoub Ghriss, under the [MIT license](skills/i-have-adhd/LICENSE). It is not updated automatically from upstream; the skill must be installed or made discoverable in each tool and activated explicitly.
 
 ## Defaults and boundaries
 
