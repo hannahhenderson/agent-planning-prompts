@@ -1,6 +1,6 @@
 # Morning handoff — template
 
-> The agent must use the upstream [`i-have-adhd` skill](https://github.com/ayghri/i-have-adhd/blob/main/skills/i-have-adhd/SKILL.md) **when it has been explicitly activated**. This file is a fallback structure and a concrete completion checklist, not a replacement for installing the skill.
+> The agent must use the bundled [`i-have-adhd` skill](skills/i-have-adhd/SKILL.md) **when it has been explicitly activated**. This file is a concrete completion checklist; install or expose the bundled skill in the target project and activate it explicitly.
 >
 > Show this handoff after **every run**, including partial progress, blockers, and errors. If the process is killed before it can respond, a prompt cannot guarantee a final response; use checkpoint data to reconstruct the handoff on restart.
 
