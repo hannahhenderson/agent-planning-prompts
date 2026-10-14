@@ -34,7 +34,7 @@ These are recommendations, not automatic selections. The user decides, and the a
 
 **Solve the user's problem, not just the ticket.** Start with the outcome people need and the experience they should have. Consider the whole journey, not only the implemented feature or happy path. Avoid building functionality that creates more confusion, work, or risk than it removes.
 
-
+**Design for misuse and set limits early.** Ask how someone could repeatedly, accidentally, or deliberately abuse a feature, exhaust shared resources, run up costs, or disrupt other customers. For user-triggered or otherwise variable-cost operations, enforce appropriate limits on the server (such as request rate, work size, concurrency, runtime, and spend). Start with conservative, observable defaults and a way to increase them for legitimate needs. Customers are usually happier receiving more capacity later than having established unlimited behavior taken away. Make limit errors clear and recoverable; UI-only limits do not protect the system.
 
 **The rollout is part of the user experience.** A feature is not finished merely because the new code works. Consider how people discover and experience it, including old and new clients, partial availability, loading and error states, accessibility, communication, and the ability to recover when things fail. For consequential changes, plan progressive exposure, observability, ownership, stop conditions, and a feasible way to disable or mitigate the change. Feature flags and phased rollouts are tools, not rituals; use them when they make the transition safer.
 

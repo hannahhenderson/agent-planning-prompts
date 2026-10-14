@@ -51,7 +51,7 @@ For each applicable impact area in the approved plan, check that the deliverable
 
 - **Rollout / user experience:** confirm exposure order, partial-rollout or mixed-client behavior, customer-facing failure and recovery paths, monitoring and stop/mitigation criteria. Verify what can be tested safely. Flag rollout ownership and communications that need a human.
 - **Data / migration:** confirm multi-version compatibility, expand/backfill/contract sequencing when appropriate, idempotency and partial-failure behavior, performance/locking risks, integrity checks, and a realistic recovery or roll-forward procedure. Do not imply a destructive migration can simply be undone.
-- **Security / privacy:** verify authorization at the real trust boundary, tenant separation where relevant, data minimization, safe handling of inputs, outputs, secrets and logs, and credible abuse cases. Security checks remain relevant even when no large threat model is necessary.
+- **Security / privacy:** verify authorization at the real trust boundary, tenant separation where relevant, data minimization, safe handling of inputs, outputs, secrets and logs, and credible abuse cases. Where work is metered or resource-intensive, verify applicable **server-side limits** and the user experience when they are reached. Security checks remain relevant even when no large threat model is necessary.
 
 A draft PR can be code-verified while **rollout or production migration remains pending**. Preserve that distinction in PRs and the final handoff. Do not execute production rollout, data writes, customer messaging, or destructive actions without explicit authorization.
 

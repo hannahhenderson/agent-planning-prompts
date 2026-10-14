@@ -15,5 +15,6 @@ These are **proposed test cases, not executed benchmark results**. Run against a
 | User-facing gradual rollout | Plan first-use and partial-rollout UX, old-client compatibility, errors, communication, observation, stop criteria and human-owned exposure gates. |
 | Large nonreversible database migration | Plan compatibility stages, safe backfill, partial failure, integrity checks, lock/performance limits and realistic recovery; do not claim an easy rollback. |
 | New tenant-scoped data API | Threat-model relevant trust boundaries, authorization and cross-tenant isolation, sensitive logs, input handling, and abuse cases; add tests before coding. |
+| User-triggered costly generation or bulk processing | Identify accidental or adversarial amplification, define server-side request/concurrency/spend limits, test threshold behavior, and provide clear errors and a path to increased capacity. |
 
 Judge success by avoidable work declined, tested behavior, **safe customer rollout and data transition plans, security boundary evidence**, residual regression risk, review attention required, and recovery accuracy, **not PR count**.
