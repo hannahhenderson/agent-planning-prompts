@@ -1,34 +1,19 @@
-# Morning handoff — template
+# Morning handoff
 
-> The agent must use the bundled [`i-have-adhd` skill](skills/i-have-adhd/SKILL.md) **when it has been explicitly activated**. This file is a concrete completion checklist; install or expose the bundled skill in the target project and activate it explicitly.
->
-> Show this handoff after **every run**, including partial progress, blockers, and errors. If the process is killed before it can respond, a prompt cannot guarantee a final response; use checkpoint data to reconstruct the handoff on restart.
+Use bundled [`i-have-adhd`](../../i-have-adhd/SKILL.md) if activated; otherwise follow this template. Report honestly on complete, partial, blocked and failed runs. A crashed process may not send a message; recover from the checkpoint.
 
-**NEXT ACTION (under 2 minutes):** Open [the first draft PR](#) and read its summary.
+**NEXT ACTION (under 2 minutes):** [One real action and link; no preamble.]
 
-**Progress:** `2 verified PRs ready · 1 blocked · 1 not started` (replace with real counts; never invent them).
+**Outcome:** [user-visible goal] — [verified / partial / blocked]. **Progress:** [N verified draft PRs; N blocked; N remaining]. **Release:** [not shipped; rollout/migration/security approval pending or not applicable].
 
-## Your morning checklist
+## Review checklist (up to five actions)
 
-1. - [ ] **Review PR #123:** brief purpose, link, and key validation evidence. Estimated review time: ~10 minutes (estimate only if justified).
-2. - [ ] **Review PR #124:** brief purpose, link, and key validation evidence.
-3. - [ ] **Resolve one blocker:** issue link, plain-language reason, and one precise decision needed.
-4. - [ ] **Check remaining queue:** say exactly where progress is checkpointed and what remains.
+1. - [ ] [Highest-priority PR, what it proves, link and relevant checks.]
+2. - [ ] [Next PR or one human decision/blocker.]
+3. - [ ] [Next PR or task, if useful.]
 
-## Evidence and exceptions
+**Evidence:** [observed behavior, exact commands/results and PR/branch links; distinguish unrun tests].
+**Risks / human gates:** [missing evidence, rollout, migration or permission approvals, or none].
+**Recovery:** [durable checkpoint, next item, full PR index if more than three].
 
-- **Verified:** test commands, passing results, and PR/branch references.
-- **Unverified:** skipped tests, environment restrictions, known defects, and residual risks.
-- **Stopped because:** complete, no independent work remains, permission required, deadline, usage limit, or other actual reason.
-
-**NEXT:** Open [the most important draft PR](#). (One short action; if already present at the top, you may omit this last line.)
-
----
-
-### Rules for agents
-
-- The **first line** must be something the reader can do immediately—not a preamble.
-- One action per checkbox; no more than five visible actions; preserve a link to the complete set when more exist.
-- Make completed changes concrete, and mark uncertain claims honestly.
-- No generic closing remarks. If a human decision is required, state one exact question.
-- No follow-up time promises; all actions must reflect work already done or an explicitly running external automation.
+Prefer roughly three priority PR reviews without hiding or blocking others. Never call draft PRs shipped or invent validation; no generic closing remarks.

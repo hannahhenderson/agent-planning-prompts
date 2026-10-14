@@ -1,49 +1,41 @@
 # Plan prompt — Claude Code and Codex
 
-> Use in **Plan mode**. Replace `$WORK_KIND`, `$TRACKER`, and `$PLAN_FILE`. If no tracker is used, replace `$TRACKER` with `none`. The plan should be saved only after approval in a write-enabled mode.
+> In Plan mode: use `$WORK_KIND` from `$TRACKER` (or `none`); default `$PLAN_FILE` to `PLAN.md`. **Do not implement.** Save only the approved plan, switching to a writable mode if necessary.
 
-I have $WORK_KIND issues in $TRACKER for this repository. Create an implementation plan to save as $PLAN_FILE after my approval. **Do not implement anything.**
+## Ask first: refactoring appetite
 
-## Objective
+Unless answered already, ask: **Minimal** (smallest safe complete change, optional refactors separately), **Opportunistic** (contained refactors with clear payoff), or **Refactor-friendly** (broader work when full benefits exceed cost)? Recommend Minimal for shared/work and Opportunistic for personal repos, but do not assume. Record `Refactoring appetite: Minimal | Opportunistic | Refactor-friendly`. Without an answer, offer a provisional minimal plan; **do not implement**.
 
-Maximize valuable, correct, independently reviewable engineering progress while preserving security, maintainability, compatibility, and existing intended behavior. Do not optimize for issue count, PR count, or agent activity.
+## Plan valuable outcomes
 
-## Discover
+Read repo rules (`AGENTS.md`/`CLAUDE.md`), tracker issues/comments, code, tests, dependencies, and open PRs. Distinguish the **user outcome** from the proposed solution. Find already-solved, unnecessary, duplicate, or conflicting work. Prefer no change, existing functionality, or narrower scope when sufficient.
 
-1. Read repository instructions (`AGENTS.md`, `CLAUDE.md`), relevant code, architecture, and existing test commands.
-2. Inspect requested tracker issues, comments, dependencies, and open PRs. Identify duplicate, obsolete, already-solved, contradictory, and underspecified work.
-3. Treat the tracker as the source of requested scope, not an infallible implementation specification. If no tracker exists, use my request to define the initial queue, then use the approved plan as its source of truth.
-4. Identify shared files, migration risks, API compatibility requirements, and likely conflicts between tasks.
+Choose the smallest **complete** approach with clear inputs, local state, isolated effects, and manageable blast radius. Consider an alternative for material choices; account for tests, integration, maintenance and review/coordination cost. Honor the selected refactoring appetite. Prioritize correctness/security and user impact, then dependencies, value, regression risk and review effort.
 
-## Prioritize
+## Impact screen: brief unless risk warrants detail
 
-First prioritize urgent security/correctness/operational risk, then user impact, dependencies and unblock potential, expected value vs. effort, regression risk, and PR reviewability. Explain meaningful tradeoffs. Favor high-value independent tasks when risk is comparable.
+For each dimension mark **none / applicable** with a reason; expand applicable areas into verifiable mitigations and human decisions:
 
-## In $PLAN_FILE, include for each item
+1. **User experience and rollout:** user journey, partial exposure, mixed clients, errors/accessibility, communications, observability, stop/mitigation criteria and rollout owner as appropriate.
+2. **Data and migrations:** schema/API compatibility, staged changes/backfill, integrity, idempotency, partial failure, scale/locking and *realistic* rollback or roll-forward. Identify destructive steps.
+3. **Security, abuse and privacy:** trust boundaries, authentication/authorization and tenant isolation, sensitive data and logs, misuse and input handling. For resource-intensive/user-triggered behavior, propose **server-side** rate, size, concurrency or spend limits with clear user-facing errors and a way to raise them.
+4. **Operational impact:** retry/concurrency failure modes, dependencies, performance and cost if the change could materially affect them.
 
-- Stable ID; tracker issue URL, if any
-- Problem, supporting evidence, and intended outcome
-- Priority and rationale
-- Proposed implementation and likely affected files
-- Dependencies and sequence
-- Scope boundaries and behavior that **must not change**
-- Objective acceptance criteria and definition of done
-- Reproduction or failing test when practical; regression and failure-case tests
-- Validation commands and evidence required
-- Complexity and regression risk (`low`, `medium`, `high`)
-- Proposed PR boundary and expected review burden
-- Whether independent delegation is useful and safe
-- Decisions requiring human approval
-- Exactly one parseable line: `Status: todo`
+Use project conventions and proportional rigor; no automatic threat model, dashboard or runbook for an unaffected area. **Planning a production action never authorizes executing it.**
 
-Use the exact strings `Status: todo`, `Status: in progress`, `Status: done`, `Status: blocked` throughout the plan; external scripts may parse them.
+## Write the approved `$PLAN_FILE`
 
-## Autonomy
+At the top: **outcome**, `Refactoring appetite: ...`, scope exclusions, impact screen, end-to-end acceptance evidence, critical path and human-owned rollout/migration gates if any.
 
-Treat routine reversible implementation choices as agent decisions. Record material assumptions. Ask me only when an unresolved decision materially affects product behavior, security, public interfaces, irreversible actions, scope, or architecture. Do not invent requirements. Explicitly flag destructive operations, schema migrations, authorization changes, or secrets-related work.
+For each reviewable implementation item include:
 
-## Before finishing
+- Stable ID and issue URL; intended observable behavior and priority.
+- Smallest complete approach, affected files/contracts, dependencies, invariants, and explicit scope boundaries.
+- Acceptance criteria, failure cases, reproducible checks (including integration/rollout/data/security checks when applicable), and low/medium/high risk.
+- Cohesive PR boundary and dependency order; human decisions; exactly one parseable `Status: todo` line.
 
-Show the recommended first batch, critical path, safe delegation opportunities, major risks, and any essential human questions. Keep the plan understandable to an engineer who did not see this conversation. **Present it for approval without starting implementation.** If Plan mode cannot write files, tell me the shortest next step to save the approved plan as $PLAN_FILE.
+Preserve status strings exactly: `Status: todo`, `Status: in progress`, `Status: done`, `Status: blocked`. Do not label code review readiness as deployment readiness.
 
-End with one concrete action for me, in the format described by the `i-have-adhd` skill if activated.
+Aim for roughly **three high-value PR reviews per batch**, **not a cap**; never compromise PR boundaries to meet it. Decide routine reversible choices autonomously; escalate material product, security, architecture, compatibility, scope or irreversible decisions.
+
+**Present the plan for approval without implementing**, with critical risks and one clear next action.

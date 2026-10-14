@@ -1,92 +1,73 @@
 # Plan → Goal
 
-A reusable **Claude Code + Codex agent skill**: plan engineering work, execute an approved backlog as validated **draft PRs**, and finish with an ADHD-friendly next-action checklist.
+**Small, safe, verified engineering changes with low human review overhead.**
 
-**No scripts to run every night. No prompts to copy every run.** Install the skills once, then invoke the workflow from the project you want to change.
+A Claude Code + Codex skill that turns issues or feature goals into an approved plan, then into independently verified **draft PRs** and a short handoff. Install once; run it inside the project you want to change.
 
-> **Access:** This GitHub repository is currently private. People you share it with need repository access to install from it. You can invite collaborators without making it public.
+## Philosophy
 
-## Getting started — once per computer
+**Make change safe by making reasoning local. Make delegation useful by making results easy to trust.**
 
-- [ ] Make sure Claude Code or Codex, Git, and Node/npm are available. Configure GitHub authentication so your agent can create branches and draft PRs in the *target* project.
-- [ ] Install the two bundled skills globally (the private repository requires GitHub access):
+Two priorities sometimes compete:
+
+**Developer experience.** Minimize the context needed to understand, test, and modify code. Prefer explicit dependencies, local state, isolated side effects, and the smallest *complete* change. Abstractions should reduce overall reasoning cost, not just relocate complexity. Refactoring has a cost, so the agent asks at the start of planning:
+
+- **Minimal**: smallest safe complete change; propose optional refactors separately (suggested for shared/work code).
+- **Opportunistic**: contained refactors with clear payoff (suggested for personal projects).
+- **Refactor-friendly**: broader improvements when benefit exceeds implementation, test, review, and coordination costs.
+
+These are suggestions; **the user chooses**, and the plan records the decision.
+
+**Product and user experience.** Solve the user's problem, including the experience of rollout, error states, partial availability, and recovery. Plan safe data transitions and mixed-version compatibility where needed. Design security and privacy in from the start: protect trust boundaries, consider accidental and deliberate misuse, and enforce sensible server-side limits on costly or shared-resource operations. Start with limits that can safely grow; make them visible and actionable for legitimate users.
+
+**When they conflict.** The cleanest implementation can produce a poor experience; a polished experience can impose disproportionate maintenance cost. Make the trade-off and its owner explicit. Prefer the smallest complete solution that delivers the user outcome safely and stays reasonable to maintain. Reliability, security, privacy, and data integrity are constraints, not optional shortcuts.
+
+**Agentic development.** Challenge whether new work is needed. Prove observed behavior rather than trusting agent assertions. Delegate routine reversible decisions; seek approval for material product, architecture, security, data, or rollout decisions. Aim for **roughly three highly validated PRs per review batch**, as a guideline, **never a cap** or a reason to bundle unrelated work or stop progress. Preserve recoverable checkpoints and prioritize the human's next action.
+
+**Every instruction must earn its keep:** scale analysis to risk; do not generate checklists, reviews, or artifacts that a change does not warrant.
+
+## Install
+
+Requires Git, Node/npm, GitHub authentication, and Claude Code or Codex. This repository is private; installation requires repository access.
 
 ```sh
 npx skills add hannahhenderson/agent-planning-prompts --skill plan-goal --skill i-have-adhd -g
 ```
 
-- [ ] Restart your coding agent, then check that **plan-goal** and **i-have-adhd** are discoverable. If you want to install into just one project, omit `-g`.
+Restart your agent and confirm both skills are available. Omit `-g` for project-local installation.
 
-The installer supports Claude Code and Codex and offers agent selection if needed. You can also [browse the skill source](skills/plan-goal/SKILL.md), or [install the skills from a local clone](https://www.npmjs.com/package/skills) if private Git authentication is unavailable.
+## Use
 
-### Companion skills
+1. Open the **target project**, not this skill's repository.
+2. **Plan:** ask `plan-goal` to plan issues or a feature into `PLAN.md`. Answer its one-time refactoring question and approve the plan before implementation.
+3. **Execute:** invoke native `/goal` with the approved `PLAN.md` (or use a normal agent session if unavailable).
+4. **Review:** follow the short handoff; inspect the highest-priority draft PRs and any human-owned rollout or migration steps.
 
-The workflow uses three distinct skills. **They are not three copies of the same functionality.**
+Example plan request:
 
-| Skill | Role | Included here? | Requirement |
-| --- | --- | --- | --- |
-| **[plan-goal](skills/plan-goal/SKILL.md)** | Plan, execute, verify and checkpoint engineering work | **Yes** — primary skill | Required |
-| **[i-have-adhd](skills/i-have-adhd/SKILL.md)** | Shape the final report into an actionable checklist | **Yes** — vendored, with [MIT attribution](skills/i-have-adhd/LICENSE) | Required handoff style |
-| **[Ponytail](https://github.com/DietrichGebert/ponytail)** | Review code for unnecessary complexity | No, third-party integration | Optional; use a direct review if absent |
-| **[Simple English](https://github.com/AminBlg/SimpleEnglish)** | Improve PR and commit wording | No, third-party integration | Optional; use clear prose if absent |
-
-The Ponytail and Simple English links are **suggested public implementations**, not a claim that they are identical to an individual's existing installations. Install them separately if desired, following their own documentation. Optional dependencies must never block otherwise safe, validated work.
-
-## Every time you want to run it
-
-1. - [ ] Open **the target project's directory** in Claude Code or Codex.
-2. - [ ] **Plan:** invoke the `plan-goal` skill in Plan mode. Tell it what kind of issues to plan and where they live; default the plan to `PLAN.md`. Review the plan before authorizing implementation.
-3. - [ ] **Execute:** after the approved plan is saved, use native `/goal` to run the plan-goal workflow against `PLAN.md` until each item has a verified draft PR or a recorded blocker.
-4. - [ ] **Come back:** start with the agent's **NEXT ACTION**, then review the linked draft PRs and unresolved blockers. No more than five checklist items should be visible.
-
-**Example instructions to type in your coding agent:**
-
-**Plan:**
 ```text
-Use the plan-goal skill to plan the open GitHub bugs in this repo into PLAN.md. Do not implement yet.
+Use plan-goal to plan the open GitHub bugs in this repo into PLAN.md. Do not implement yet.
 ```
 
-**Execute** (in tools that support `/goal`):
+Example execution request:
+
 ```text
-/goal Use the plan-goal skill to implement approved PLAN.md. Continue until every eligible item has a validated draft PR or documented blocker. End with an i-have-adhd checklist.
+/goal Use plan-goal to execute approved PLAN.md until each eligible item has a verified draft PR or a documented blocker. End with an i-have-adhd handoff.
 ```
 
-**Skill activation:** In Claude Code you can use `/plan-goal` and `/i-have-adhd`; in Codex, `$plan-goal` and `$i-have-adhd`. Activate `i-have-adhd` early in the session if you want ADHD-style responses throughout, not only at the final handoff. The workflow also includes [a fallback handoff template](skills/plan-goal/references/morning-handoff.md) if the companion skill cannot run.
+Claude Code can activate `/plan-goal` and `/i-have-adhd`; Codex can activate `$plan-goal` and `$i-have-adhd`. Plan mode may be read-only: save the **approved** plan in a writable mode. Native Goal mode does not restart a killed CLI process.
 
-**Important:** Plan mode can be read-only. Save the approved plan after switching to a mode that permits edits. Goal mode continues within an active session; it does **not** automatically restart a dead CLI process.
+## Source and optional tools
 
-## When you come back — your checklist
+- [`skills/plan-goal/SKILL.md`](skills/plan-goal/SKILL.md): installable router; [planning](skills/plan-goal/references/plan.md), [execution](skills/plan-goal/references/goal.md), and [handoff](skills/plan-goal/references/morning-handoff.md) instructions.
+- [`skills/i-have-adhd`](skills/i-have-adhd/SKILL.md): bundled companion for an actionable handoff.
+- [`PLAN_PROMPT.md`](PLAN_PROMPT.md), [`GOAL_PROMPT.md`](GOAL_PROMPT.md), [`MORNING_HANDOFF.md`](MORNING_HANDOFF.md): paste-friendly copies, checked for synchronization in CI.
+- [Evaluation scenarios](EVALUATION_SCENARIOS.md): representative cases to run before treating the workflow as proven.
 
-- [ ] Open the **first** linked draft PR.
-- [ ] Read what changed and the validation results.
-- [ ] Review and merge it manually only if satisfied.
-- [ ] Resolve the highest-priority blocker, if any.
-- [ ] Resume remaining planned work when ready.
+Optional, separately installed specialists: [Ponytail](https://github.com/DietrichGebert/ponytail) for simplicity/locality, [Pstack](https://github.com/cursor/plugins/tree/main/pstack) for targeted risk/architecture review (not orchestration), and [Simple English](https://github.com/AminBlg/SimpleEnglish) for clear PR wording. None substitutes for independent correctness/security review.
 
-## Repository map
+## Limits and attribution
 
-| Location | Purpose |
-| --- | --- |
-| [skills/plan-goal/SKILL.md](skills/plan-goal/SKILL.md) | **Installable entrypoint**; routes planning, execution, recovery, and handoff |
-| [skills/plan-goal/references/](skills/plan-goal/references/) | Self-contained workflow instructions shipped with the skill |
-| [skills/i-have-adhd/SKILL.md](skills/i-have-adhd/SKILL.md) | Vendored handoff-style skill |
-| [PLAN_PROMPT.md](PLAN_PROMPT.md) | Paste-friendly planning prompt (manual alternative) |
-| [GOAL_PROMPT.md](GOAL_PROMPT.md) | Paste-friendly execution prompt (manual alternative) |
-| [MORNING_HANDOFF.md](MORNING_HANDOFF.md) | Paste-friendly morning-handoff template (manual alternative) |
+The agent may open **draft PRs on task branches**, not push to main, merge, deploy, change access/secrets, or execute production rollouts or data migrations. Plan approval does **not** authorize those operations. `Status: done` means a verified draft PR, **not shipped**. Checkpoints enable recovery, but an agent cannot guarantee continuation after its process dies.
 
-## Design and limitations
-
-- Agent changes are restricted to dedicated branches/worktrees and **draft PRs**. Never push to main, force-push, merge, or deploy.
-- The agent checkpoints work and reconciles status against Git and actual PRs on resumption.
-- Only the coordinating agent edits the plan file. Blocked work is explicitly distinguished from done.
-- Each run should end with one small next action, real test evidence, and no more than five review steps.
-- A crash or hard kill can prevent the final handoff; use persisted state to recover.
-- A private repository is shareable **only with people who have access**. Do not assume a link alone grants installation rights.
-
-For native `/goal` behavior, see [Claude Code's documentation](https://code.claude.com/docs/en/goal) and [Codex's guide](https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex).
-
-## Maintenance and attribution
-
-The [i-have-adhd skill](skills/i-have-adhd/SKILL.md) is an unmodified copy of [ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd), copyright © 2026 Ayoub Ghriss, distributed under the [MIT license](skills/i-have-adhd/LICENSE). Updates to upstream are **not** pulled automatically.
-
-The prompt copies at the repo root and their counterparts under `skills/plan-goal/references/` must be updated together. To contribute, maintain backwards-compatible `Status: todo | in progress | done | blocked` lines and keep the prompts generic—never hardcode personal repos, secrets, or tokens.
+The bundled `i-have-adhd` skill is an unmodified copy of [ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd), copyright © 2026 Ayoub Ghriss, licensed [MIT](skills/i-have-adhd/LICENSE); updates are not automatic. Keep root prompts synchronized with their `skills/plan-goal/references/` copies and preserve the parseable `Status: todo | in progress | done | blocked` values.
