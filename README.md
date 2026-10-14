@@ -6,25 +6,39 @@ A Claude Code + Codex skill that turns issues or feature goals into an approved 
 
 ## Philosophy
 
-**Make change safe by making reasoning local. Make delegation useful by making results easy to trust.**
+**Make change safe by making reasoning local. Make delegation to the robots useful by making results easy to trust.**
 
 Two priorities sometimes compete:
 
-**Developer experience.** Minimize the context needed to understand, test, and modify code. Prefer explicit dependencies, local state, isolated side effects, and the smallest *complete* change. Abstractions should reduce overall reasoning cost, not just relocate complexity. Refactoring has a cost, so the agent asks at the start of planning:
+1. **Developer experience.**
 
-- **Minimal**: smallest safe complete change; propose optional refactors separately (suggested for shared/work code).
-- **Opportunistic**: contained refactors with clear payoff (suggested for personal projects).
-- **Refactor-friendly**: broader improvements when benefit exceeds implementation, test, review, and coordination costs.
+   Minimize the context needed to understand, test, and modify code. Prefer explicit dependencies, local state, isolated side effects, and the smallest *complete* change. Abstractions should reduce overall reasoning cost, not just relocate complexity. 
 
-These are suggestions; **the user chooses**, and the plan records the decision.
+   Refactoring has a cost, so the agent asks at the start of planning:
 
-**Product and user experience.** Solve the user's problem, including the experience of rollout, error states, partial availability, and recovery. Plan safe data transitions and mixed-version compatibility where needed. Design security and privacy in from the start: protect trust boundaries, consider accidental and deliberate misuse, and enforce sensible server-side limits on costly or shared-resource operations. Start with limits that can safely grow; make them visible and actionable for legitimate users.
+    - **Minimal**: smallest safe complete change; propose optional refactors separately (suggested for shared/work code).
+    - **Opportunistic**: contained refactors with clear payoff (suggested for personal projects).
+    - **Refactor-friendly**: broader improvements when benefit exceeds implementation, test, review, and coordination costs.
 
-**When they conflict.** The cleanest implementation can produce a poor experience; a polished experience can impose disproportionate maintenance cost. Make the trade-off and its owner explicit. Prefer the smallest complete solution that delivers the user outcome safely and stays reasonable to maintain. Reliability, security, privacy, and data integrity are constraints, not optional shortcuts.
+   These are suggestions; **the user chooses**, and the plan records the decision.
 
-**Agentic development.** Challenge whether new work is needed. Prove observed behavior rather than trusting agent assertions. Delegate routine reversible decisions; seek approval for material product, architecture, security, data, or rollout decisions. Aim for **roughly three highly validated PRs per review batch**, as a guideline, **never a cap** or a reason to bundle unrelated work or stop progress. Preserve recoverable checkpoints and prioritize the human's next action.
+2. **Product and user experience.**
 
-**Every instruction must earn its keep:** scale analysis to risk; do not generate checklists, reviews, or artifacts that a change does not warrant.
+   Solve the user's problem, including the experience of rollout, error states, partial availability, and recovery. 
+   
+   Plan safe data transitions and mixed-version compatibility where needed. Design security and privacy in from the start: protect trust boundaries, consider accidental and deliberate misuse, and enforce sensible server-side limits on costly or shared-resource operations. Start with limits that can safely grow; make them visible and actionable for legitimate users.
+
+**When these two priorities conflict.**
+
+The cleanest implementation can produce a poor experience; a polished experience can impose disproportionate maintenance cost. Make the trade-off and its owner explicit. Prefer the smallest complete solution that delivers the user outcome safely and stays reasonable to maintain. Reliability, security, privacy, and data integrity are constraints, not optional shortcuts.
+
+**Agentic development.**
+
+Challenge whether new work is needed. Prove observed behavior rather than trusting agent assertions. Delegate routine reversible decisions; seek approval for material product, architecture, security, data, or rollout decisions. Aim for **roughly three highly validated PRs per review batch**, as a guideline, **never a cap** or a reason to bundle unrelated work or stop progress. Preserve recoverable checkpoints and prioritize the human's next action.
+
+**Every instruction must earn its keep:**
+
+Scale analysis to risk; do not generate checklists, reviews, or artifacts that a change does not warrant.
 
 ## Install
 
