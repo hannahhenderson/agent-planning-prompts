@@ -1,0 +1,15 @@
+name: Check prompt copies
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  prompt-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Confirm root prompts equal installed references
+        run: |
+          cmp PLAN_PROMPT.md skills/plan-goal/references/plan.md
+          cmp GOAL_PROMPT.md skills/plan-goal/references/goal.md
+          cmp MORNING_HANDOFF.md skills/plan-goal/references/morning-handoff.md

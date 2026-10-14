@@ -6,6 +6,8 @@
 
 **NEXT ACTION (under 2 minutes):** Open [the first draft PR](#) and read its summary.
 
+**Outcome:** `[user-visible goal]` — `[verified / partially verified / blocked]` (replace with evidence, not self-report).
+
 **Progress:** `2 verified PRs ready · 1 blocked · 1 not started` (replace with real counts; never invent them).
 
 ## Your morning checklist
@@ -13,11 +15,12 @@
 1. - [ ] **Review PR #123:** brief purpose, link, and key validation evidence. Estimated review time: ~10 minutes (estimate only if justified).
 2. - [ ] **Review PR #124:** brief purpose, link, and key validation evidence.
 3. - [ ] **Resolve one blocker:** issue link, plain-language reason, and one precise decision needed.
-4. - [ ] **Check remaining queue:** say exactly where progress is checkpointed and what remains.
+4. - [ ] **Check remaining queue:** link the durable checkpoint, the full PR index, and what remains.
 
 ## Evidence and exceptions
 
-- **Verified:** test commands, passing results, and PR/branch references.
+- **Verified:** real observed behavior, exact test commands/results, integration proof when needed, and PR/branch references.
+- **Review order:** prioritize up to three high-value ready PRs as a guideline; link the entire queue. Call out significant coupling/refactoring decisions.
 - **Unverified:** skipped tests, environment restrictions, known defects, and residual risks.
 - **Stopped because:** complete, no independent work remains, permission required, deadline, usage limit, or other actual reason.
 
@@ -28,7 +31,7 @@
 ### Rules for agents
 
 - The **first line** must be something the reader can do immediately—not a preamble.
-- One action per checkbox; no more than five visible actions; preserve a link to the complete set when more exist.
+- One action per checkbox; no more than five visible actions. Aim for three priority PR reviews without hiding, delaying, or blocking additional completed work; link a complete index.
 - Make completed changes concrete, and mark uncertain claims honestly.
 - No generic closing remarks. If a human decision is required, state one exact question.
 - No follow-up time promises; all actions must reflect work already done or an explicitly running external automation.

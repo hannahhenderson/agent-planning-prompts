@@ -4,9 +4,17 @@
 
 I have $WORK_KIND issues in $TRACKER for this repository. Create an implementation plan to save as $PLAN_FILE after my approval. **Do not implement anything.**
 
+## Required first question: refactoring appetite
+
+Before proposing implementation, ask:
+
+> How much refactoring is in scope for this run: **Minimal** (smallest safe complete patch; optional refactors separately), **Opportunistic** (contained refactors with clear benefit), or **Refactor-friendly** (broader refactors if total benefit outweighs implementation, validation, review and coordination cost)?
+
+Recommend **Minimal** for shared/work repositories and **Opportunistic** for personal projects, but **always ask** unless the user already explicitly answered. Do not infer the answer. Record `Refactoring appetite: Minimal | Opportunistic | Refactor-friendly` in the approved plan. If unanswered, present conservative provisional alternatives but do not begin implementation or silently authorize optional refactoring.
+
 ## Objective
 
-Maximize valuable, correct, independently reviewable engineering progress while preserving security, maintainability, compatibility, and existing intended behavior. Do not optimize for issue count, PR count, or agent activity.
+Maximize valuable, correct, **locally understandable and independently verifiable outcomes per unit of human review effort**, preserving security, maintainability, compatibility, and existing intended behavior. Prefer a few exceptionally well-validated changes over many weak ones. Do not optimize for issue count, PR count, code volume, or agent activity.
 
 ## Discover
 
@@ -15,23 +23,35 @@ Maximize valuable, correct, independently reviewable engineering progress while 
 3. Treat the tracker as the source of requested scope, not an infallible implementation specification. If no tracker exists, use my request to define the initial queue, then use the approved plan as its source of truth.
 4. Identify shared files, migration risks, API compatibility requirements, and likely conflicts between tasks.
 
+## Challenge the work before making a backlog
+
+Separate desired outcomes from tracker-proposed solutions. Identify work to delete, skip, combine or defer, including already-implemented features. Evaluate existing helpers and platform features before inventing infrastructure.
+
+For material choices, compare the smallest complete patch to a genuinely different solution. Judge blast radius, dependency and state locality, side effects, testability, compatibility, total context to understand the result, and **all** implementation, testing, review and coordination costs. Favor explicit dependencies, confined side effects, and abstractions only when they reduce reasoning context. Do not perform a broad refactor simply because the code is imperfect. Follow the selected appetite and seek approval for material scope expansion.
+
 ## Prioritize
 
-First prioritize urgent security/correctness/operational risk, then user impact, dependencies and unblock potential, expected value vs. effort, regression risk, and PR reviewability. Explain meaningful tradeoffs. Favor high-value independent tasks when risk is comparable.
+First prioritize urgent security/correctness/operational risk, then user impact, dependencies and unblock potential, expected value vs. total effort, regression risk, and **human review burden**. Choose PR boundaries around cohesive behavior, not a numerical PR target. Explain meaningful tradeoffs. Favor high-value independent tasks when risk is comparable.
 
-## In $PLAN_FILE, include for each item
+## In $PLAN_FILE, include for the overall run
+
+- Selected `Refactoring appetite: ...`, desired user-visible outcome, and observed end-to-end acceptance check
+- Work that should not be implemented and why; the critical path, PR dependency order and integration validation strategy
+- The roughly three highest-value expected human review actions as a **guideline**, not a cap
+
+## For each item, include
 
 - Stable ID; tracker issue URL, if any
 - Problem, supporting evidence, and intended outcome
 - Priority and rationale
-- Proposed implementation and likely affected files
+- Proposed smallest complete implementation, material alternative considered, and likely affected files
 - Dependencies and sequence
-- Scope boundaries and behavior that **must not change**
+- Scope boundaries, existing callers/contracts, side effects, state dependencies, and behavior that **must not change**
 - Objective acceptance criteria and definition of done
 - Reproduction or failing test when practical; regression and failure-case tests
-- Validation commands and evidence required
+- Validation commands, objective observed evidence at local and cross-boundary levels, and an integration check for dependent PRs
 - Complexity and regression risk (`low`, `medium`, `high`)
-- Proposed PR boundary and expected review burden
+- Proposed PR boundary, stacked dependencies if any, and expected human review burden
 - Whether independent delegation is useful and safe
 - Decisions requiring human approval
 - Exactly one parseable line: `Status: todo`
@@ -40,10 +60,10 @@ Use the exact strings `Status: todo`, `Status: in progress`, `Status: done`, `St
 
 ## Autonomy
 
-Treat routine reversible implementation choices as agent decisions. Record material assumptions. Ask me only when an unresolved decision materially affects product behavior, security, public interfaces, irreversible actions, scope, or architecture. Do not invent requirements. Explicitly flag destructive operations, schema migrations, authorization changes, or secrets-related work.
+Treat routine reversible implementation choices as agent decisions, within the approved refactoring appetite. Record material assumptions. Ask me only when an unresolved decision materially affects product behavior, security, public interfaces, irreversible actions, scope, or architecture. Do not invent requirements. Explicitly flag destructive operations, schema migrations, authorization changes, or secrets-related work.
 
 ## Before finishing
 
-Show the recommended first batch, critical path, safe delegation opportunities, major risks, and any essential human questions. Keep the plan understandable to an engineer who did not see this conversation. **Present it for approval without starting implementation.** If Plan mode cannot write files, tell me the shortest next step to save the approved plan as $PLAN_FILE.
+Show a recommended first review batch (aim for about three, not a limit), critical path, safe delegation opportunities, risk-tiered verification, and any essential human questions. Keep the plan understandable to an engineer who did not see this conversation. **Present it for approval without starting implementation.** If Plan mode cannot write files, tell me the shortest next step to save the approved plan as $PLAN_FILE.
 
 End with one concrete action for me, in the format described by the `i-have-adhd` skill if activated.
