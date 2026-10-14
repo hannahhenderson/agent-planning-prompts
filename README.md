@@ -12,13 +12,9 @@ A reusable **Claude Code + Codex agent skill** for trustworthy delegation: chall
 
 Writing code is rarely the hard part of software development. Understanding what should change, what must stay the same, and whether the result actually works is harder. Coding agents can produce changes quickly, but speed is only useful when the output is safe, maintainable, and inexpensive for a human to evaluate.
 
-This workflow is built around two complementary ideas:
+This workflow balances two distinct philosophies: **developer experience** and **product and user experience**. We started by optimizing how safely engineers and agents can reason about code. That is necessary, but not sufficient: the result must also serve users and be safe to introduce into the world. Autonomous execution connects both through verifiable evidence and bounded human oversight.
 
-- **Software should minimize the context needed to change it safely.**
-- **Introducing changes should be safe for users, data, and the system across time.**
-- **Development should maximize independently verifiable progress while minimizing the attention required to trust it.**
-
-### How we think about code
+### Developer experience
 
 **Local reasoning over global knowledge.** Prefer behavior that can be understood, tested, and modified without reconstructing unrelated parts of the system. Make dependencies explicit, keep state and transitions local, and isolate side effects at clear boundaries. Use pure, testable functions where practical, without imposing a paradigm on codebases that do not use it.
 
@@ -34,7 +30,11 @@ This workflow is built around two complementary ideas:
 
 These are recommendations, not automatic selections. The user decides, and the approved plan records the answer.
 
-### How we think about introducing change
+### Product and user experience
+
+**Solve the user's problem, not just the ticket.** Start with the outcome people need and the experience they should have. Consider the whole journey, not only the implemented feature or happy path. Avoid building functionality that creates more confusion, work, or risk than it removes.
+
+
 
 **The rollout is part of the user experience.** A feature is not finished merely because the new code works. Consider how people discover and experience it, including old and new clients, partial availability, loading and error states, accessibility, communication, and the ability to recover when things fail. For consequential changes, plan progressive exposure, observability, ownership, stop conditions, and a feasible way to disable or mitigate the change. Feature flags and phased rollouts are tools, not rituals; use them when they make the transition safer.
 
@@ -43,6 +43,14 @@ These are recommendations, not automatic selections. The user decides, and the a
 **Security is a design input, not a final gate.** Start from trust boundaries, data sensitivity, identity, authorization, and credible misuse. Validate untrusted inputs and outputs at the right boundaries, enforce least privilege and tenant isolation where applicable, and avoid exposing secrets or sensitive data in logs, errors, or retained artifacts. Higher-risk changes should include a lightweight threat model and focused abuse/security tests. Security review strengthens these decisions; it cannot replace making them during planning.
 
 **Risk determines ceremony.** Every plan considers customer impact, persistent data, and security. When a dimension is not affected, say so briefly. When it is affected, plan the transition and its proof. A small internal fix does not need a migration playbook; a customer-data change may require careful sequencing, human approval, and a separate rollout plan. A verified draft PR is **ready for review, not deployed or released**.
+
+### When the philosophies conflict
+
+These goals are complementary, but they are not always aligned. A cohesive user experience may require more code, compatibility work, or coordination than an engineer would prefer. A satisfying refactor may improve the developer experience while delaying meaningful user value. A smaller implementation may be easier to review but leave users with awkward transitions or unreliable behavior.
+
+**Do not resolve these tensions by always choosing the shortest diff, the cleanest architecture, or the most ambitious product experience.** Identify the alternatives, who benefits, who pays the cost, and what risks remain. Prefer the smallest *complete* solution that delivers the intended user outcome safely and remains reasonable to maintain. For material trade-offs in user behavior, scope, cost, security or architecture, surface the decision for human approval.
+
+Reliability, security, privacy and data integrity are constraints on both philosophies, not optional trade-offs for speed or convenience.
 
 ### How we think about agentic development
 
