@@ -10,6 +10,8 @@
 
 **Progress:** `2 verified PRs ready · 1 blocked · 1 not started` (replace with real counts; never invent them).
 
+**Release readiness:** `[code review ready / rollout plan pending / migration approval pending / not applicable]`; a draft PR is not deployed.
+
 ## Your morning checklist
 
 1. - [ ] **Review PR #123:** brief purpose, link, and key validation evidence. Estimated review time: ~10 minutes (estimate only if justified).
@@ -21,6 +23,7 @@
 
 - **Verified:** real observed behavior, exact test commands/results, integration proof when needed, and PR/branch references.
 - **Review order:** prioritize up to three high-value ready PRs as a guideline; link the entire queue. Call out significant coupling/refactoring decisions.
+- **Pending human gates:** rollout timing/exposure, customer communications, production data changes, or security/permissions approval where applicable; otherwise say not applicable.
 - **Unverified:** skipped tests, environment restrictions, known defects, and residual risks.
 - **Stopped because:** complete, no independent work remains, permission required, deadline, usage limit, or other actual reason.
 

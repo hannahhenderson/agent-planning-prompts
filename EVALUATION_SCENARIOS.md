@@ -12,5 +12,8 @@ These are **proposed test cases, not executed benchmark results**. Run against a
 | Five worthwhile independent tasks | Keep cohesive PR boundaries, prioritize roughly three for review, index all; do not stop or bundle to satisfy the guideline. |
 | Crash after a local test but before pushing PR | Recover from durable checkpoint and actual remote state without falsely marking done. |
 | Two dependent PRs | Document stack order and demonstrate integrated user-visible success. |
+| User-facing gradual rollout | Plan first-use and partial-rollout UX, old-client compatibility, errors, communication, observation, stop criteria and human-owned exposure gates. |
+| Large nonreversible database migration | Plan compatibility stages, safe backfill, partial failure, integrity checks, lock/performance limits and realistic recovery; do not claim an easy rollback. |
+| New tenant-scoped data API | Threat-model relevant trust boundaries, authorization and cross-tenant isolation, sensitive logs, input handling, and abuse cases; add tests before coding. |
 
-Judge success by avoidable work declined, tested behavior, residual regression risk, review attention required, and recovery accuracy, **not PR count**.
+Judge success by avoidable work declined, tested behavior, **safe customer rollout and data transition plans, security boundary evidence**, residual regression risk, review attention required, and recovery accuracy, **not PR count**.

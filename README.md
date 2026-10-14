@@ -15,6 +15,7 @@ Writing code is rarely the hard part of software development. Understanding what
 This workflow is built around two complementary ideas:
 
 - **Software should minimize the context needed to change it safely.**
+- **Introducing changes should be safe for users, data, and the system across time.**
 - **Development should maximize independently verifiable progress while minimizing the attention required to trust it.**
 
 ### How we think about code
@@ -33,13 +34,23 @@ This workflow is built around two complementary ideas:
 
 These are recommendations, not automatic selections. The user decides, and the approved plan records the answer.
 
+### How we think about introducing change
+
+**The rollout is part of the user experience.** A feature is not finished merely because the new code works. Consider how people discover and experience it, including old and new clients, partial availability, loading and error states, accessibility, communication, and the ability to recover when things fail. For consequential changes, plan progressive exposure, observability, ownership, stop conditions, and a feasible way to disable or mitigate the change. Feature flags and phased rollouts are tools, not rituals; use them when they make the transition safer.
+
+**Data migrations are transitions, not single operations.** Plan how old and new application versions coexist with old and new data. When appropriate, separate schema expansion, backfill, and removal of legacy fields. Consider idempotency, batches, locking and performance impact, data integrity checks, monitoring, and what to do if the migration stops halfway. A destructive migration or data rewrite may not be reversible; specify a realistic recovery or forward-fix strategy rather than promising a rollback that cannot work.
+
+**Security is a design input, not a final gate.** Start from trust boundaries, data sensitivity, identity, authorization, and credible misuse. Validate untrusted inputs and outputs at the right boundaries, enforce least privilege and tenant isolation where applicable, and avoid exposing secrets or sensitive data in logs, errors, or retained artifacts. Higher-risk changes should include a lightweight threat model and focused abuse/security tests. Security review strengthens these decisions; it cannot replace making them during planning.
+
+**Risk determines ceremony.** Every plan considers customer impact, persistent data, and security. When a dimension is not affected, say so briefly. When it is affected, plan the transition and its proof. A small internal fix does not need a migration playbook; a customer-data change may require careful sequencing, human approval, and a separate rollout plan. A verified draft PR is **ready for review, not deployed or released**.
+
 ### How we think about agentic development
 
 **Question the work before implementing it.** A tracker issue describes a request, not necessarily the best solution. Sometimes the right result is to reuse existing behavior, narrow the feature, or write no code.
 
-**Plan outcomes, not activity.** Define the user-visible behavior and the evidence that would prove it works. Divide that outcome into cohesive, independently reviewable changes instead of maximizing tasks or PRs.
+**Plan outcomes, not activity.** Define the user-visible behavior, the experience of introducing it, and the evidence that would prove it works. Divide that outcome into cohesive, independently reviewable changes instead of maximizing tasks or PRs.
 
-**Autonomy needs boundaries.** Let agents make routine, reversible implementation decisions, but require explicit approval for consequential product, security, architectural, or scope decisions. An agent should not quietly choose an expensive refactor on someone else's behalf.
+**Autonomy needs boundaries.** Let agents make routine, reversible implementation decisions, but require explicit approval for consequential product, security, architectural, operational, data, or scope decisions. An agent should not quietly choose an expensive refactor on someone else's behalf.
 
 **Evidence over confidence.** Prefer reproducible tests and observed behavior to persuasive summaries, passing compilation, or agent self-assessment. Scale verification to risk; review correctness, security, blast radius, and needless complexity as distinct concerns.
 
@@ -123,6 +134,7 @@ Use the plan-goal skill to plan the open GitHub bugs in this repo into PLAN.md. 
 - Agent changes are restricted to dedicated branches/worktrees and **draft PRs**. Never push to main, force-push, merge, or deploy.
 - The agent checkpoints on a durable non-main coordination branch or approved store and reconciles state against actual Git refs, tests, and PRs on resumption.
 - Only the coordinating agent edits the plan file. Blocked work is explicitly distinguished from done.
+- Review-ready PRs are not production releases. Rollout, migration execution, and destructive/irreversible changes require their own explicit approval and ownership.
 - Each run should end with one small next action, real test evidence, and no more than five review steps.
 - A crash or hard kill can prevent the final handoff; use persisted state to recover.
 - A private repository is shareable **only with people who have access**. Do not assume a link alone grants installation rights.

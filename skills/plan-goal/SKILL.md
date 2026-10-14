@@ -11,7 +11,7 @@ Turn high-level goals into **valuable, exceptionally well-validated draft PRs** 
 
 Prefer **safe, local change**: explicit dependencies, isolated side effects, locally understandable state and behavior, and named, testable helpers where useful. Reuse existing conventions. Introduce an abstraction only if it decreases the total context required to understand or modify the system. A short diff is not automatically a small blast radius. Complete all necessary caller, contract, fixture, test, validation, and security work.
 
-Challenge whether requested work needs to exist. Prefer eliminating unnecessary work, narrowing scope, or using existing functionality. Plan user-visible outcomes, then choose cohesive reviewable PRs. Verify actual behavior, not agent assertions or compilation alone. Favor a small number of exceptionally well-validated PRs with low human review cost.
+Challenge whether requested work needs to exist. Treat user rollout experience, production state transitions, data lifecycle and security boundaries as part of the design when affected. Prefer eliminating unnecessary work, narrowing scope, or using existing functionality. Plan user-visible outcomes, then choose cohesive reviewable PRs. Verify actual behavior, not agent assertions or compilation alone. Favor a small number of exceptionally well-validated PRs with low human review cost.
 
 ## When invoked
 
@@ -32,7 +32,7 @@ Challenge whether requested work needs to exist. Prefer eliminating unnecessary 
 
 Use Plan mode if supported. Gather `WORK_KIND` (bugs, features, tech debt), `TRACKER` (Linear, GitHub Issues, file, or none), and `PLAN_FILE` (default `PLAN.md`) from the user's request. Do not ask for values you can infer safely.
 
-Inspect the code, tracker, tests, dependencies, and existing PRs. Challenge the need for code and the proposed design; evaluate local reasoning, blast radius, review burden, and end-to-end verification. Apply `references/plan.md` to produce verifiable, sequenced work items with exact `Status: todo` lines. Present the plan for approval; do not implement yet. If Plan mode is read-only, persist it only after approval in a mode that allows writing.
+Inspect the code, tracker, tests, dependencies, and existing PRs. Challenge the need for code and the proposed design; screen for customer rollout impact, migration/data compatibility and security/trust boundaries. Evaluate local reasoning, blast radius, review burden, transition safety and end-to-end verification. Require plans for applicable operational risks, not boilerplate for inapplicable ones. Apply `references/plan.md` to produce verifiable, sequenced work items with exact `Status: todo` lines. Present the plan for approval; do not implement yet. If Plan mode is read-only, persist it only after approval in a mode that allows writing.
 
 ## Execute or resume
 
@@ -40,7 +40,7 @@ Read `references/goal.md` and the approved plan. For approved legacy plans lacki
 
 If native `/goal` is supported, set this as a concise completion condition and keep detailed execution instructions in the reference. If unavailable, follow the instructions in a normal execution session without promising automatic continuation.
 
-Never push directly to main, force-push, merge, deploy, alter secrets, or perform destructive production changes without explicit authorization. Keep a durable checkpoint on a dedicated non-main coordination branch or approved store. The orchestrator is the sole writer of plan statuses. Aim for roughly three substantial PRs per review batch as a **soft guideline**, never a hard cap, grouping mandate, or reason to stop eligible work.
+Never push directly to main, force-push, merge, deploy, alter secrets, or perform destructive production changes without explicit authorization. A draft PR represents review-ready code, **not rollout or migration authorization**. Keep a durable checkpoint on a dedicated non-main coordination branch or approved store. The orchestrator is the sole writer of plan statuses. Aim for roughly three substantial PRs per review batch as a **soft guideline**, never a hard cap, grouping mandate, or reason to stop eligible work.
 
 ## Companion and specialist skills
 

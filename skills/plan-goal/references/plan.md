@@ -21,7 +21,17 @@ Maximize valuable, correct, **locally understandable and independently verifiabl
 1. Read repository instructions (`AGENTS.md`, `CLAUDE.md`), relevant code, architecture, and existing test commands.
 2. Inspect requested tracker issues, comments, dependencies, and open PRs. Identify duplicate, obsolete, already-solved, contradictory, and underspecified work.
 3. Treat the tracker as the source of requested scope, not an infallible implementation specification. If no tracker exists, use my request to define the initial queue, then use the approved plan as its source of truth.
-4. Identify shared files, migration risks, API compatibility requirements, and likely conflicts between tasks.
+4. Identify shared files, customer-visible transitions, existing data/schema compatibility, API compatibility requirements, trust boundaries, and likely conflicts between tasks.
+
+## Screen every plan for production and user impact
+
+Record a brief **Impact screen** with `none / applicable` for each of these areas. For an applicable area, provide a concrete plan proportional to risk, including evidence and responsible human decisions. "None" must be supported by the scope rather than assumed.
+
+1. **End-user experience and rollout.** What changes for users during and after release, including partial rollout, existing sessions/clients, error/empty/loading states, accessibility, onboarding or communication, and an interrupted or disabled feature? For consequential changes specify exposure strategy (flag, cohort, phased launch if useful), health signals, owner, stop conditions, and mitigation/rollback. Do not equate a merged PR with a shipped experience.
+2. **Data lifecycle and migrations.** Does the work modify persistent formats, schemas, indexes, data meaning, storage, or retention? Check old/new-version compatibility, safe sequencing (e.g. expand -> backfill -> contract where appropriate), production scale/locking/load, idempotency, partial failure, verification of integrity, and realistic recovery. Destructive steps or data rewrites may require roll-forward rather than an assumed reversible rollback.
+3. **Security and privacy.** Identify trust boundaries, sensitive data, identities, authorization and tenant isolation, untrusted input/output, secrets, least privilege, logging/retention, and credible misuse. All changes should preserve existing protections; for affected/high-risk areas add a brief threat model and explicit misuse/security tests.
+
+The plan can define a **human-owned** rollout/migration runbook and approval gates, but autonomous execution remains limited to authorized branches, local/test environments and draft PRs. Production changes, access changes and irreversible steps require explicit authorization.
 
 ## Challenge the work before making a backlog
 
@@ -35,8 +45,8 @@ First prioritize urgent security/correctness/operational risk, then user impact,
 
 ## In $PLAN_FILE, include for the overall run
 
-- Selected `Refactoring appetite: ...`, desired user-visible outcome, and observed end-to-end acceptance check
-- Work that should not be implemented and why; the critical path, PR dependency order and integration validation strategy
+- Selected `Refactoring appetite: ...`, desired user-visible outcome, end-to-end acceptance check, and **Impact screen** (rollout UX, data/migrations, security/privacy), with `none` or applicable safeguards
+- Work that should not be implemented and why; the critical path, PR dependency order, integration validation, and human-owned release or data migration gates where applicable
 - The roughly three highest-value expected human review actions as a **guideline**, not a cap
 
 ## For each item, include
@@ -47,20 +57,20 @@ First prioritize urgent security/correctness/operational risk, then user impact,
 - Proposed smallest complete implementation, material alternative considered, and likely affected files
 - Dependencies and sequence
 - Scope boundaries, existing callers/contracts, side effects, state dependencies, and behavior that **must not change**
-- Objective acceptance criteria and definition of done
+- Objective acceptance criteria and definition of done; distinguish code/PR readiness from production rollout readiness
 - Reproduction or failing test when practical; regression and failure-case tests
 - Validation commands, objective observed evidence at local and cross-boundary levels, and an integration check for dependent PRs
 - Complexity and regression risk (`low`, `medium`, `high`)
 - Proposed PR boundary, stacked dependencies if any, and expected human review burden
 - Whether independent delegation is useful and safe
-- Decisions requiring human approval
+- Decisions requiring human approval, including rollout exposure, destructive data steps, and security/permission changes
 - Exactly one parseable line: `Status: todo`
 
 Use the exact strings `Status: todo`, `Status: in progress`, `Status: done`, `Status: blocked` throughout the plan; external scripts may parse them.
 
 ## Autonomy
 
-Treat routine reversible implementation choices as agent decisions, within the approved refactoring appetite. Record material assumptions. Ask me only when an unresolved decision materially affects product behavior, security, public interfaces, irreversible actions, scope, or architecture. Do not invent requirements. Explicitly flag destructive operations, schema migrations, authorization changes, or secrets-related work.
+Treat routine reversible implementation choices as agent decisions, within the approved refactoring appetite. Record material assumptions. Ask me only when an unresolved decision materially affects product behavior, security, public interfaces, irreversible actions, scope, or architecture. Do not invent requirements. Explicitly flag production rollouts, destructive operations, schema/data migrations, authorization changes, sensitive data flows, or secrets-related work.
 
 ## Before finishing
 
