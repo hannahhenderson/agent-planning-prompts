@@ -6,13 +6,48 @@ A reusable **Claude Code + Codex agent skill** for trustworthy delegation: chall
 
 > **Access:** This GitHub repository is currently private. People you share it with need repository access to install from it. You can invite collaborators without making it public.
 
-## Engineering and review defaults
+## Philosophy
 
-**Optimize for valuable outcomes per unit of human attention, not issue count or PR count.** Prefer safe, local changes: explicit dependencies, isolated side effects, limited hidden state, and abstractions only when they reduce total reasoning overhead. Challenge whether work needs to exist before implementing it.
+**Make change safe by making reasoning local. Make delegation useful by making its results easy to trust.**
 
-**The first planning question is refactoring appetite:** Minimal (smallest safe complete change, optional refactors separately), Opportunistic (contained, demonstrated improvements), or Refactor-friendly (broader improvements whose total value outweighs implementation, testing, review, and coordination cost). Recommend Minimal for work/shared projects and Opportunistic for personal projects, **but ask rather than assuming**. Record the answer in the approved plan.
+Writing code is rarely the hard part of software development. Understanding what should change, what must stay the same, and whether the result actually works is harder. Coding agents can produce changes quickly, but speed is only useful when the output is safe, maintainable, and inexpensive for a human to evaluate.
 
-**Aim for roughly three exceptionally well-validated PRs per human review batch.** This is a guideline, **not a hard cap**, not a reason to combine unrelated changes, and not a reason to halt otherwise eligible work. Plan and verify complete user-visible outcomes, including dependencies across PRs.
+This workflow is built around two complementary ideas:
+
+- **Software should minimize the context needed to change it safely.**
+- **Development should maximize independently verifiable progress while minimizing the attention required to trust it.**
+
+### How we think about code
+
+**Local reasoning over global knowledge.** Prefer behavior that can be understood, tested, and modified without reconstructing unrelated parts of the system. Make dependencies explicit, keep state and transitions local, and isolate side effects at clear boundaries. Use pure, testable functions where practical, without imposing a paradigm on codebases that do not use it.
+
+**The smallest *complete* change, not necessarily the smallest diff.** Minimize blast radius and unnecessary work, but include the callers, tests, error handling, and integration needed to finish the job. A few lines that modify shared global state may be riskier than a longer change with explicit boundaries.
+
+**Abstractions must earn their keep.** Introduce an abstraction when it *reduces the total context needed to reason about the system*. Moving complexity behind more layers or adding speculative flexibility is not necessarily an improvement. Prefer an existing helper or a direct implementation when either is clearer.
+
+**Refactoring is an investment, not a virtue.** Improving structure can make future changes cheaper, but broad refactors also cost implementation time, testing, review, and coordination. The right tradeoff depends on whether this is a personal project or shared production code, so the agent asks about refactoring appetite **at the beginning of every planning run**:
+
+- **Minimal:** make the smallest safe complete change; propose optional refactors separately. Recommended for shared/work code.
+- **Opportunistic:** include contained refactors when they demonstrably improve locality or maintainability. Recommended for personal projects.
+- **Refactor-friendly:** consider broader improvements when their total benefit outweighs their full cost.
+
+These are recommendations, not automatic selections. The user decides, and the approved plan records the answer.
+
+### How we think about agentic development
+
+**Question the work before implementing it.** A tracker issue describes a request, not necessarily the best solution. Sometimes the right result is to reuse existing behavior, narrow the feature, or write no code.
+
+**Plan outcomes, not activity.** Define the user-visible behavior and the evidence that would prove it works. Divide that outcome into cohesive, independently reviewable changes instead of maximizing tasks or PRs.
+
+**Autonomy needs boundaries.** Let agents make routine, reversible implementation decisions, but require explicit approval for consequential product, security, architectural, or scope decisions. An agent should not quietly choose an expensive refactor on someone else's behalf.
+
+**Evidence over confidence.** Prefer reproducible tests and observed behavior to persuasive summaries, passing compilation, or agent self-assessment. Scale verification to risk; review correctness, security, blast radius, and needless complexity as distinct concerns.
+
+**Optimize the human review cost.** Aim for roughly **three exceptionally well-validated PRs per review batch**, not as a hard cap. More PRs are appropriate when they improve isolation or reviewability. Never bundle unrelated changes, split cohesive work, or stop useful execution to satisfy the guideline.
+
+**Leave a recoverable trail.** Persist progress, reconcile claims against actual Git and PR state, and return a short handoff with the next action, validation evidence, and unresolved decisions. A human should not need to reconstruct an agent's entire session.
+
+The goal is **trustworthy progress, not autonomous activity**. The best outcome may be one small PR, several well-separated PRs, or a justified decision not to change the code at all.
 
 ## Getting started — once per computer
 
