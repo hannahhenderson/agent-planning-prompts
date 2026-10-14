@@ -1,40 +1,19 @@
-# Morning handoff — template
+# Morning handoff
 
-> The agent must use the bundled [`i-have-adhd` skill](../../i-have-adhd/SKILL.md) **when it has been explicitly activated**. This file is a concrete completion checklist; install or expose the bundled skill in the target project and activate it explicitly.
->
-> Show this handoff after **every run**, including partial progress, blockers, and errors. If the process is killed before it can respond, a prompt cannot guarantee a final response; use checkpoint data to reconstruct the handoff on restart.
+Use bundled [`i-have-adhd`](../../i-have-adhd/SKILL.md) if activated; otherwise follow this template. Report honestly on complete, partial, blocked and failed runs. A crashed process may not send a message; recover from the checkpoint.
 
-**NEXT ACTION (under 2 minutes):** Open [the first draft PR](#) and read its summary.
+**NEXT ACTION (under 2 minutes):** [One real action and link; no preamble.]
 
-**Outcome:** `[user-visible goal]` — `[verified / partially verified / blocked]` (replace with evidence, not self-report).
+**Outcome:** [user-visible goal] — [verified / partial / blocked]. **Progress:** [N verified draft PRs; N blocked; N remaining]. **Release:** [not shipped; rollout/migration/security approval pending or not applicable].
 
-**Progress:** `2 verified PRs ready · 1 blocked · 1 not started` (replace with real counts; never invent them).
+## Review checklist (up to five actions)
 
-**Release readiness:** `[code review ready / rollout plan pending / migration approval pending / not applicable]`; a draft PR is not deployed.
+1. - [ ] [Highest-priority PR, what it proves, link and relevant checks.]
+2. - [ ] [Next PR or one human decision/blocker.]
+3. - [ ] [Next PR or task, if useful.]
 
-## Your morning checklist
+**Evidence:** [observed behavior, exact commands/results and PR/branch links; distinguish unrun tests].
+**Risks / human gates:** [missing evidence, rollout, migration or permission approvals, or none].
+**Recovery:** [durable checkpoint, next item, full PR index if more than three].
 
-1. - [ ] **Review PR #123:** brief purpose, link, and key validation evidence. Estimated review time: ~10 minutes (estimate only if justified).
-2. - [ ] **Review PR #124:** brief purpose, link, and key validation evidence.
-3. - [ ] **Resolve one blocker:** issue link, plain-language reason, and one precise decision needed.
-4. - [ ] **Check remaining queue:** link the durable checkpoint, the full PR index, and what remains.
-
-## Evidence and exceptions
-
-- **Verified:** real observed behavior, exact test commands/results, integration proof when needed, and PR/branch references.
-- **Review order:** prioritize up to three high-value ready PRs as a guideline; link the entire queue. Call out significant coupling/refactoring decisions.
-- **Pending human gates:** rollout timing/exposure, customer communications, production data changes, or security/permissions approval where applicable; otherwise say not applicable.
-- **Unverified:** skipped tests, environment restrictions, known defects, and residual risks.
-- **Stopped because:** complete, no independent work remains, permission required, deadline, usage limit, or other actual reason.
-
-**NEXT:** Open [the most important draft PR](#). (One short action; if already present at the top, you may omit this last line.)
-
----
-
-### Rules for agents
-
-- The **first line** must be something the reader can do immediately—not a preamble.
-- One action per checkbox; no more than five visible actions. Aim for three priority PR reviews without hiding, delaying, or blocking additional completed work; link a complete index.
-- Make completed changes concrete, and mark uncertain claims honestly.
-- No generic closing remarks. If a human decision is required, state one exact question.
-- No follow-up time promises; all actions must reflect work already done or an explicitly running external automation.
+Prefer roughly three priority PR reviews without hiding or blocking others. Never call draft PRs shipped or invent validation; no generic closing remarks.
