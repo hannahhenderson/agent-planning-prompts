@@ -83,6 +83,18 @@ Why this matters for safety: through the skills CLI you load third-party **instr
 
 Each commit should run on its own and pass the CI `cmp` check.
 
+## Suggestion (parked, not started): ask how a change will be observed
+
+Raised at the end of the session. The prompts do not require instrumentation today.
+
+- `PLAN_PROMPT.md:19` lists "observability" inside the rollout dimension "as appropriate". The agent can mark that dimension "none".
+- `GOAL_PROMPT.md` never mentions observability, tracing, metrics or logging. Step 5 asks for proof by tests, not by signals the shipped code emits.
+- A run can finish with a verified draft PR and no new log line or span.
+
+Proposed change: add one risk-proportional item to the Operational impact dimension in `PLAN_PROMPT.md` and a matching check in `GOAL_PROMPT.md` step 5. For changes that could fail or degrade in production, name how you would know: the signal (span, metric or log), where it lands, and who watches it. Small local changes would not need telemetry. Mirror both edits in `references/` because of the CI `cmp` check.
+
+Keep this separate from the skill-embed work. It is a different change.
+
 ## Where I was wrong in this session
 
 - I first read a **stale local checkout** (21 commits behind). My early answers described the old repo. I fixed this by running `git fetch` and `git pull --ff-only`.
